@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<div id="chinh" style="position: relative"></div>
+
+<style>
+    #o_quan_ben_trai{
+        position: absolute;
+        width: 128px;
+        height: 256px;
+        border: 1px black solid;
+        border-top-left-radius: 125px;
+        border-bottom-left-radius: 125px;
+    }
+    #o_quan_ben_phai{
+        position: absolute;
+        width: 128px;
+        height: 256px;
+        border: 1px black solid;
+        border-top-right-radius: 125px;
+        border-bottom-right-radius: 125px;
+    }
+    .o_dan_o_giua{
+        position: absolute;
+        border: 1px black solid;
+        width: 128px;
+        height: 128px;
+    }
+</style>
+    
+<script>
+    var cac_o = [3, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5];
+    var chinh = document.querySelector("#chinh");
+    // Hien thi cac o quan va o dan
+    ve_cac_o_dan_va_quan();
+
+    function ve_cac_o_dan_va_quan(){
+        // Ve o quan ben trai
+        var o_quan_ben_trai = document.createElement("canvas");
+        o_quan_ben_trai.setAttribute("id","o_quan_ben_trai");
+        o_quan_ben_trai.style.top = 0 + "px";
+        o_quan_ben_trai.style.left = 0 + "px";
+        chinh.appendChild(o_quan_ben_trai);
+
+        // Ve o quan ben phai
+        var o_quan_ben_phai = document.createElement("canvas");
+        o_quan_ben_phai.setAttribute("id","o_quan_ben_phai");
+        o_quan_ben_phai.style.top = 0 + "px";
+        o_quan_ben_phai.style.left = 128*6 + "px";
+        chinh.appendChild(o_quan_ben_phai);
+
+        // Ve cac o dan o hang tren
+        for(var i = 1; i <= 5; i++){
+            var o_dan_hang_tren = document.createElement("canvas");
+            o_dan_hang_tren.setAttribute("id", i+"");
+            o_dan_hang_tren.setAttribute("class", "o_dan_o_giua");
+            o_dan_hang_tren.style.top = 0 + "px";
+            o_dan_hang_tren.style.left = 128*i + "px";
+            chinh.appendChild(o_dan_hang_tren);
+        }
+
+        // Ve cac o dan o hang duoi
+        var bien_tam = 1;
+        for(var i = 11; i >= 7; i--){
+            var o_dan_hang_duoi = document.createElement("canvas");
+            o_dan_hang_duoi.setAttribute("id", i+"");
+            o_dan_hang_duoi.setAttribute("class", "o_dan_o_giua");
+            o_dan_hang_duoi.style.top = 128 + "px";
+            o_dan_hang_duoi.style.left = 128*bien_tam + "px";
+            chinh.appendChild(o_dan_hang_duoi);
+            bien_tam = bien_tam + 1;
+        }
+    }
+</script>
