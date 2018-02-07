@@ -98,7 +98,7 @@
 </style>
     
 <script>
-    var cac_o = [3, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5];
+    var so_dan_cac_o = [3, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5];
     // Điểm của từng người chơi
     var diem_nguoi_thu_1 = 0;
     var diem_nguoi_thu_2 = 0;
@@ -114,6 +114,7 @@
     // Hien thi cac o quan va o dan
     ve_cac_o_dan_va_quan();
 
+    // Hàm vẽ các khung của bàn cờ và số lượng quan và dân trong đó
     function ve_cac_o_dan_va_quan(){
         // Ve o quan ben trai
         var o_quan_ben_trai = document.createElement("canvas");
@@ -136,22 +137,7 @@
             o_dan_hang_tren.setAttribute("class", "o_dan_o_giua");
             o_dan_hang_tren.style.top = 0 + "px";
             o_dan_hang_tren.style.left = 128*i + "px";
-
-            // Khởi tạo một con dân ở góc trên bên trái
-            var dan = new Image();
-            dan.src = "../images/dan.png";
-            var be_mat = o_dan_hang_tren.getContext("2d");
-            dan.addEventListener("load", function(){
-                for(var j = 0; j < 256; j += 32){
-                    for(var k = 0; k < 256; k += 32){
-                        be_mat.drawImage(
-                            dan,
-                            0, 0, 32, 32,
-                            j+5, k+5, 32, 32
-                        );
-                    }
-                }
-            });
+            hien_thi_so_dan_tung_o(o_dan_hang_tren, so_dan_cac_o[i]);
             ban_co.appendChild(o_dan_hang_tren);
         }
 
@@ -163,9 +149,41 @@
             o_dan_hang_duoi.setAttribute("class", "o_dan_o_giua");
             o_dan_hang_duoi.style.top = 128 + "px";
             o_dan_hang_duoi.style.left = 128*bien_tam + "px";
+            hien_thi_so_dan_tung_o(o_dan_hang_duoi, so_dan_cac_o[i]);
             ban_co.appendChild(o_dan_hang_duoi);
             bien_tam = bien_tam + 1;
         }
     }
+    
+    // Hàm hiển thị số lượng dân trong từng ô dân
+    function hien_thi_so_dan_tung_o(o_dan, so_luong_dan){
+            // Một vài phép tính để vẽ số dân cho phù hợp
+            var so_hang_day_du_can_ve = Math.floor(so_luong_dan / 9);
+            var so_cot_can_ve_them = so_luong_dan % 9;
+
+            var dan = new Image();
+            dan.src = "../images/dan.png";
+            var be_mat = o_dan.getContext("2d");
+            dan.addEventListener("load", function(){
+                for(var cot = 0; cot < 288; cot += 32){
+                    for(var hang = 0; hang < (32*so_hang_day_du_can_ve); hang += 32){
+                        be_mat.drawImage(
+                            dan,    
+                            0, 0, 32, 32,
+                            cot, hang, 32, 32
+                        );
+                    }
+                }
+                // Vẽ thêm một hàng không đầy đủ nữa
+                for(var cot = 0; cot < (32*so_cot_can_ve_them); cot += 32){
+                    be_mat.drawImage(
+                        dan,
+                        0, 0, 32, 32,
+                        cot, 32*so_hang_day_du_can_ve, 32, 32
+                    );           
+                }
+            }, false);
+        }
+
 
 </script>
