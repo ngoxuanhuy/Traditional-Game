@@ -107,9 +107,10 @@
     // Vị trí được đặt thêm sỏi cuối cùng tại mỗi lượt chơi
     var vi_tri_dat_dan;
     
-    // Hai ô quan bên trái và bên phải
+    // Hai ô quan bên trái và bên phải và các ô dân
     var o_quan_ben_trai;
     var o_quan_ben_phai;
+    var o_dan = [];
 
     // Lượt đi hiện tại của người nào ?
     // Người chơi 1: 1. Người chơi 2: 2
@@ -125,12 +126,26 @@
     var soi_tren_tay = 0;
 
     var ban_co = document.querySelector("#ban_co");
+    /*
+        Phần chính của chương trình
+    */
     // Hien thi cac o quan va o dan
     ve_cac_o_dan_va_quan();
 
+    // Gán sự kiện lắng nghe cho tất cả các ô dân
+    for(var i = 1; i <= 5; i++){
+        o_dan[i].addEventListener("click", thuc_hien_khi_o_dan_duoc_chon(o_dan[i]), false);
+    }
+    // 5 ô hàng dưới thuộc phạm vi quản lí của người chơi 2 (từ chỉ số 7 đến 11)
+    for(var i = 7; i <= 11; i++){
+        o_dan[i].addEventListener("click", thuc_hien_khi_o_dan_duoc_chon(o_dan[i]), false);
+    }
+    
+    function thuc_hien_khi_o_dan_duoc_chon(o_dan){
+        return function(){console.log(o_dan.id);}
+    }
 
     // Hàm vẽ các khung của bàn cờ và số lượng quan và dân trong đó
-    // mỗi ô dân trên bàn cờ sẽ chờ sự kiến được click
     function ve_cac_o_dan_va_quan(){
         // Vẽ ô quan ở bên trái
         o_quan_ben_trai = document.createElement("canvas");
@@ -150,29 +165,29 @@
 
         // Vẽ các ô dân ở hàng trên
         for(var i = 1; i <= 5; i++){
-            var o_dan_hang_tren = document.createElement("canvas");
-            o_dan_hang_tren.setAttribute("id", "id_" + i);
-            o_dan_hang_tren.setAttribute("class", "o_dan_o_giua");
-            o_dan_hang_tren.style.top = 0 + "px";
-            o_dan_hang_tren.style.left = 128*i + "px";
-            hien_thi_so_dan_trong_o_dan(o_dan_hang_tren, so_dan_moi_o[i]);
-            ban_co.appendChild(o_dan_hang_tren);
+            o_dan[i] = document.createElement("canvas");
+            o_dan[i].setAttribute("id", "id_" + i);
+            o_dan[i].setAttribute("class", "o_dan_o_giua");
+            o_dan[i].style.top = 0 + "px";
+            o_dan[i].style.left = 128*i + "px";
+            hien_thi_so_dan_trong_o_dan(o_dan[i], so_dan_moi_o[i]);
+            ban_co.appendChild(o_dan[i]);
         }
 
         // Vẽ các ô dân ở hàng dưới
         var bien_tam = 1;
         for(var i = 11; i >= 7; i--){
-            var o_dan_hang_duoi = document.createElement("canvas");
-            o_dan_hang_duoi.setAttribute("id", "id_" + i);
-            o_dan_hang_duoi.setAttribute("class", "o_dan_o_giua");
-            o_dan_hang_duoi.style.top = 128 + "px";
-            o_dan_hang_duoi.style.left = 128*bien_tam + "px";
-            hien_thi_so_dan_trong_o_dan(o_dan_hang_duoi, so_dan_moi_o[i]);
-            ban_co.appendChild(o_dan_hang_duoi);
+            o_dan[i] = document.createElement("canvas");
+            o_dan[i].setAttribute("id", "id_" + i);
+            o_dan[i].setAttribute("class", "o_dan_o_giua");
+            o_dan[i].style.top = 128 + "px";
+            o_dan[i].style.left = 128*bien_tam + "px";
+            hien_thi_so_dan_trong_o_dan(o_dan[i], so_dan_moi_o[i]);
+            ban_co.appendChild(o_dan[i]);
             bien_tam = bien_tam + 1;
         }
     }
-    
+
     // Hàm hiển thị số lượng dân trong từng ô dân
     function hien_thi_so_dan_trong_o_dan(o_dan, so_luong_dan){
             // Một vài phép tính để vẽ số dân cho phù hợp
@@ -292,7 +307,7 @@
             }
         }
     }
-    
+
     // Hàm kiểm tra và đưa số lượng sỏi và kho nếu thỏa mãn
     function thu_dan_vao_kho(){
         // Kiểm tra hai vị trí liền trước vị trí cuối cùng dựa theo hướng đã chọn
