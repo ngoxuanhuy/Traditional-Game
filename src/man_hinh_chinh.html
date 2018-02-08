@@ -24,7 +24,7 @@
 <style>
     #tro_choi{
         border: 2px black dashed;
-        overflow: scroll;
+        
     }
     #header{
         width: 910px;
@@ -68,8 +68,8 @@
     /* cac thuoc tinh cho o quan ben trai */
     #id_0{
         position: relative;
-        width: 129px;
-        height: 257px;
+        width: 128px;
+        height: 256px;
         border: 0.5px black solid;
         border-top-left-radius: 125px;
         border-bottom-left-radius: 125px;
@@ -77,8 +77,8 @@
     /* Cac thuoc tinh cho o quan ben phai */
     #id_6{
         position: absolute;
-        width: 129px;
-        height: 257px;
+        width: 128px;
+        height: 256px;
         border: 0.5px black solid;
         border-top-right-radius: 125px;
         border-bottom-right-radius: 125px;
@@ -86,8 +86,8 @@
     .o_dan_o_giua{
         position: absolute;
         border: 0.5px black solid;
-        width: 129px;
-        height: 129px;
+        width: 128px;
+        height: 128px;
     }
     .o_vuong_nho{
         position: absolute;
@@ -98,11 +98,25 @@
 </style>
     
 <script>
-    var so_dan_cac_o = [3, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5];
+    var so_dan_moi_o = [0, 5, 5, 5, 5, 5, 0, 5, 5, 5, 5, 5];
+    var so_quan_moi_o = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
     // Điểm của từng người chơi
     var diem_nguoi_thu_1 = 0;
     var diem_nguoi_thu_2 = 0;
+
+    // Vị trí được đặt thêm sỏi cuối cùng tại mỗi lượt chơi
+    var vi_tri_dat_dan;
     
+    // Hai ô quan bên trái và bên phải
+    var o_quan_ben_trai;
+    var o_quan_ben_phai;
+
+    // Lượt đi hiện tại của người nào ?
+    // Người chơi 1: 1. Người chơi 2: 2
+    // Ban đầu người chơi 1 đi đầu tiên, được điều khiển các ô từ 1 đến 5
+    // Người chơi 2 đi sau, được điều khiển các ô từ 7 đến 11
+    var luot_di = 1;
+
     // Hướng đi đang được lựa chọn
     // Trái: -1, Phải: 1, Chưa chọn: 0
     var huong_di_chuyen = 0;
@@ -114,20 +128,24 @@
     // Hien thi cac o quan va o dan
     ve_cac_o_dan_va_quan();
 
+
     // Hàm vẽ các khung của bàn cờ và số lượng quan và dân trong đó
+    // mỗi ô dân trên bàn cờ sẽ chờ sự kiến được click
     function ve_cac_o_dan_va_quan(){
-        // Ve o quan ben trai
-        var o_quan_ben_trai = document.createElement("canvas");
+        // Vẽ ô quan ở bên trái
+        o_quan_ben_trai = document.createElement("canvas");
         o_quan_ben_trai.setAttribute("id","id_0");
         o_quan_ben_trai.style.top = 0 + "px";
         o_quan_ben_trai.style.left = 0 + "px";
+        hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_trai, so_dan_moi_o[0], so_quan_moi_o[0]);
         ban_co.appendChild(o_quan_ben_trai);
 
-        // Ve o quan ben phai
-        var o_quan_ben_phai = document.createElement("canvas");
+        // Vẽ ô quan ở bên phải
+        o_quan_ben_phai = document.createElement("canvas");
         o_quan_ben_phai.setAttribute("id","id_6");
         o_quan_ben_phai.style.top = 0 + "px";
         o_quan_ben_phai.style.left = 128*6 + "px";
+        hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_phai, so_dan_moi_o[6], so_quan_moi_o[6]);
         ban_co.appendChild(o_quan_ben_phai);
 
         // Vẽ các ô dân ở hàng trên
@@ -137,11 +155,11 @@
             o_dan_hang_tren.setAttribute("class", "o_dan_o_giua");
             o_dan_hang_tren.style.top = 0 + "px";
             o_dan_hang_tren.style.left = 128*i + "px";
-            hien_thi_so_dan_tung_o(o_dan_hang_tren, so_dan_cac_o[i]);
+            hien_thi_so_dan_trong_o_dan(o_dan_hang_tren, so_dan_moi_o[i]);
             ban_co.appendChild(o_dan_hang_tren);
         }
 
-        // Ve cac o dan o hang duoi
+        // Vẽ các ô dân ở hàng dưới
         var bien_tam = 1;
         for(var i = 11; i >= 7; i--){
             var o_dan_hang_duoi = document.createElement("canvas");
@@ -149,41 +167,143 @@
             o_dan_hang_duoi.setAttribute("class", "o_dan_o_giua");
             o_dan_hang_duoi.style.top = 128 + "px";
             o_dan_hang_duoi.style.left = 128*bien_tam + "px";
-            hien_thi_so_dan_tung_o(o_dan_hang_duoi, so_dan_cac_o[i]);
+            hien_thi_so_dan_trong_o_dan(o_dan_hang_duoi, so_dan_moi_o[i]);
             ban_co.appendChild(o_dan_hang_duoi);
             bien_tam = bien_tam + 1;
         }
     }
     
     // Hàm hiển thị số lượng dân trong từng ô dân
-    function hien_thi_so_dan_tung_o(o_dan, so_luong_dan){
+    function hien_thi_so_dan_trong_o_dan(o_dan, so_luong_dan){
             // Một vài phép tính để vẽ số dân cho phù hợp
             var so_hang_day_du_can_ve = Math.floor(so_luong_dan / 9);
-            var so_cot_can_ve_them = so_luong_dan % 9;
+            var so_dan_can_ve_them = so_luong_dan % 9;
 
             var dan = new Image();
             dan.src = "../images/dan.png";
-            var be_mat = o_dan.getContext("2d");
+            var ngu_canh = o_dan.getContext("2d");
             dan.addEventListener("load", function(){
                 for(var cot = 0; cot < 288; cot += 32){
                     for(var hang = 0; hang < (32*so_hang_day_du_can_ve); hang += 32){
-                        be_mat.drawImage(
+                        ngu_canh.drawImage(
                             dan,    
                             0, 0, 32, 32,
                             cot, hang, 32, 32
                         );
                     }
                 }
-                // Vẽ thêm một hàng không đầy đủ nữa
-                for(var cot = 0; cot < (32*so_cot_can_ve_them); cot += 32){
-                    be_mat.drawImage(
+                // Vẽ thêm số dân còn dư
+                for(var cot = 0; cot < (32*so_dan_can_ve_them); cot += 32){
+                    ngu_canh.drawImage(
                         dan,
                         0, 0, 32, 32,
                         cot, 32*so_hang_day_du_can_ve, 32, 32
                     );           
                 }
             }, false);
+    }
+
+    // Hàm vẽ dân và quan ở các ô quan
+    // Tham số thứ nhất xác định vẽ trong ô quan bên trái hay bên phải
+    // Tham số thứ hai xác định số dân trong ô
+    // Tham số thứ ba xác định có quan trong ô không?
+    function hien_thi_so_dan_va_quan_trong_o_quan(o_quan, so_luong_dan, so_quan){
+        // Một vài phép toán xử lí trước khi vẽ
+        var so_cot_day_du_can_ve = Math.floor(so_luong_dan / 9);
+        var so_dan_can_ve_them = so_luong_dan % 9;
+
+        // Nếu là ô quan bên trái
+        if (o_quan === o_quan_ben_trai){
+            // Vẽ các dân trong ô
+            var dan = new Image();
+            dan.src = "../images/dan.png";
+            var ngu_canh_co_dan = o_quan.getContext("2d");
+            dan.addEventListener("load", function(){
+                for(var cot = 185; cot < 185+(32*so_cot_day_du_can_ve); cot += 32){
+                    for(var hang = 0; hang < 144; hang += 16){
+                        ngu_canh_co_dan.drawImage(
+                            dan,    
+                            0, 0, 32, 32,
+                            cot, hang, 32, 16
+                        );
+                    }
+                }
+                // Vẽ thêm số dân còn dư
+                for(var hang = 0; hang < (16*so_dan_can_ve_them); hang += 16){
+                    ngu_canh_co_dan.drawImage(
+                        dan,
+                        0, 0, 32, 32,
+                        185+32*so_cot_day_du_can_ve, hang, 32, 16
+                    );           
+                }
+            }, false);
+
+            // Nếu trong ô này có quan => vẽ quan
+            if (so_quan !== 0){
+                var quan = new Image();
+                quan.src = "../images/quan.png";
+                var ngu_canh_co_quan = o_quan.getContext("2d");
+                quan.addEventListener("load", function(){
+                    ngu_canh_co_quan.drawImage(
+                        quan,
+                        0, 0, 321, 512,
+                        10, 48, 96, 48
+                    );
+                }, false);
+            }
+        } 
+        // Nếu là ô quan bên phải
+        else {
+            var dan = new Image();
+            dan.src = "../images/dan.png";
+            var ngu_canh_co_dan = o_quan.getContext("2d");
+            dan.addEventListener("load", function(){
+                for(var cot = 0; cot < (32*so_cot_day_du_can_ve); cot += 32){
+                    for(var hang = 0; hang < 144; hang += 16){
+                        ngu_canh_co_quan.drawImage(
+                            dan,    
+                            0, 0, 32, 32,
+                            cot, hang, 32, 16
+                        );
+                    }
+                }
+                // Vẽ thêm số dân còn dư
+                for(var hang = 0; hang < (16*so_dan_can_ve_them); hang+=16){
+                    ngu_canh_co_dan.drawImage(
+                        dan,
+                        0, 0, 32, 32,
+                        32*so_cot_day_du_can_ve, hang, 32, 16
+                    );
+                }
+            }, false);
+
+            // Nếu trong ô này có quan => vẽ quan
+            if (so_quan !== 0){
+                var quan = new Image();
+                quan.src = "../images/quan.png";
+                var ngu_canh_co_quan = o_quan.getContext("2d");
+                quan.addEventListener("load", function(){
+                    ngu_canh_co_quan.drawImage(
+                        quan,
+                        0, 0, 321, 512,
+                        185, 48, 96, 48
+                    );
+                }, false);
+            }
         }
+    }
+    
+    // Hàm kiểm tra và đưa số lượng sỏi và kho nếu thỏa mãn
+    function thu_dan_vao_kho(){
+        // Kiểm tra hai vị trí liền trước vị trí cuối cùng dựa theo hướng đã chọn
+        var truoc_mot_buoc, truoc_hai_buoc;
+        // Nếu người chơi chọn tiến sang phải
+        if (huong_di_chuyen === 1){
+            
+        }
+        // Nếu người chơi chọn tiến sang trái
+        if (huong_di_chuyen === -1){
 
-
+        }
+    }
 </script>
