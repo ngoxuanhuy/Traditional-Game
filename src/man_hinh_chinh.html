@@ -113,7 +113,7 @@
     var o_dan = [];
 
     // Lượt đi hiện tại của người nào ?
-    // Người chơi 1: 1. Người chơi 2: 2
+    // Người chơi 1: 1. Người chơi 2: 0
     // Ban đầu người chơi 1 đi đầu tiên, được điều khiển các ô từ 1 đến 5
     // Người chơi 2 đi sau, được điều khiển các ô từ 7 đến 11
     var luot_di = 1;
@@ -145,8 +145,6 @@
         return function(){
             //  Giả sử lựa chọn bên phải
             huong_di_chuyen = -1;
-            // Giả sử đang ở lượt người chơi 1
-            luot_di = 2;
             // Nếu đang là lượt đi của người chơi thứ nhất
             if (luot_di === 1){
                 if (vi_tri > 6){
@@ -231,7 +229,10 @@
                         soi_tren_tay--;
                     }
                 }
-            } else if (luot_di === 2){
+                // Tới lượt di chuyển của người chơi còn lại
+                luot_di = (luot_di + 1) % 2;
+            } 
+            else if (luot_di === 0){
                 if (vi_tri < 6){
                     console.log("Người chơi 2, bạn phải chọn các ô từ 7 đến 11 thuộc quyền sở hữu của bạn");
                     return;
@@ -312,8 +313,9 @@
                         soi_tren_tay--;
                     }
                 }
+                // Tới lượt di chuyển của người chơi còn lại
+                luot_di = (luot_di + 1) % 2;
             }
-            
         }
     }
 
