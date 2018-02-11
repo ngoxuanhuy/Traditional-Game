@@ -17,7 +17,11 @@
     </div>
     <div id="body">
         <div id="ban_co"></div>
-        <div id="thong_tin"></div>
+        <div id="thong_tin">
+            <div id="thong_tin_luot_choi"></div>
+            <div id="thong_tin_huong_di_chuyen"></div>
+            <div id="thong_tin_so_soi_con_lai"></div>
+        </div>
     </div>
 </div>
 
@@ -111,36 +115,49 @@
 </style>
 
 <!-- 3 dòng tiếp theo để thêm thư viện hiển thị custom dialog -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'> -->
 <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
-<script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script>
+<!-- <script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script> -->
 
 <script>
+    // Các hằng số
+    var THONG_TIN_LUOT_CHOI = "Đang là lượt chơi của: ";
+    var THONG_TIN_HUONG_DI_CHUYEN = "Hướng di chuyển đang chọn: ";
+    var THONG_TIN_SO_SOI_CON_LAI = "Số sỏi còn lại trên tay: ";
     var so_dan_moi_o = [0, 5, 5, 5, 5, 5, 0, 5, 5, 5, 5, 5];
     var so_quan_moi_o = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0];
+    // Lượt đi hiện tại của người nào ?
+    // Người chơi 1: 1. Người chơi 2: 0
+    // Ban đầu người chơi 1 đi đầu tiên, được điều khiển các ô từ 1 đến 5
+    // Người chơi 2 đi sau, được điều khiển các ô từ 7 đến 11
+    var luot_di = 1;
+    // Số lượng sỏi mà người chơi đang cầm trên tay
+    var soi_tren_tay = 0;
     // Điểm của từng người chơi
     var diem_nguoi_thu_1 = document.querySelector("#diem_1");
     var diem_nguoi_thu_2 = document.querySelector("#diem_2");
+    var ban_co = document.querySelector("#ban_co");
+    // Các thông tin khác liên quan
+    var thong_tin_luot_choi = document.querySelector("#thong_tin_luot_choi");
+    var thong_tin_huong_di_chuyen = document.querySelector("#thong_tin_huong_di_chuyen");
+    var thong_tin_so_soi_con_lai_tren_tay = document.querySelector("#thong_tin_so_soi_con_lai");
+    // Gán giá trị ban đầu cho một số trường
     diem_nguoi_thu_1.innerHTML = "0";
     diem_nguoi_thu_2.innerHTML = "0";
+    thong_tin_luot_choi.innerHTML = THONG_TIN_LUOT_CHOI + "<strong>Người chơi thứ nhất</strong>";
+    thong_tin_huong_di_chuyen.innerHTML = THONG_TIN_HUONG_DI_CHUYEN + "<strong>Chưa xác định</strong>";
+    thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
     // Vị trí được đặt thêm sỏi cuối cùng tại mỗi lượt chơi
     var vi_tri_dat_soi_cuoi_cung;
     // Hai ô quan bên trái và bên phải và các ô dân
     var o_quan_ben_trai;
     var o_quan_ben_phai;
     var o_dan = [];
-    // Lượt đi hiện tại của người nào ?
-    // Người chơi 1: 1. Người chơi 2: 0
-    // Ban đầu người chơi 1 đi đầu tiên, được điều khiển các ô từ 1 đến 5
-    // Người chơi 2 đi sau, được điều khiển các ô từ 7 đến 11
-    var luot_di = 1;
     // Hướng đi đang được lựa chọn
     // Trái: -1, Phải: 1, Chưa chọn: 0
     var huong_di_chuyen;
-    // Số lượng sỏi mà người chơi đang cầm trên tay
-    var soi_tren_tay = 0;
-    var ban_co = document.querySelector("#ban_co");
+
     /*
         Phần chính của chương trình
     */
@@ -163,6 +180,8 @@
         return function () {
             // Nếu đang là lượt đi của người chơi thứ nhất
             if (luot_di === 1) {
+                // Hiển thị lượt đi của người chơi thứ nhất trên bảng thông báo
+                thong_tin_luot_choi.innerHTML = THONG_TIN_LUOT_CHOI + "<strong>Người chơi thứ nhất<strong>";
                 if (vi_tri > 6) {
                     alert("Người chơi 1, bạn chỉ được chọn 5 ô ở hàng trên. Hãy chọn lại");
                     console.log("Người chơi 1, bạn phải chọn các ô từ 1 đến 5 thuộc quyền sở hữu của bạn");
@@ -181,6 +200,8 @@
                 luot_di = (luot_di + 1) % 2;
             }
             else if (luot_di === 0) {
+                // Hiển thị lượt đi của người chơi thứ hai trên bảng thông báo
+                thong_tin_luot_choi.innerHTML = THONG_TIN_LUOT_CHOI + "<strong>Người chơi thứ hai</strong>";
                 if (vi_tri < 6) {
                     alert("Người chơi 2, bạn chỉ được chọn 5 ô ở hàng dưới. Hãy chọn lại");
                     console.log("Người chơi 2, bạn phải chọn các ô từ 7 đến 11 thuộc quyền sở hữu của bạn");
@@ -360,8 +381,25 @@
         var huong_di = prompt("Chọn hướng di chuyển: -1(trái) hoặc 1(phải)", "1");
         if (huong_di == null || huong_di == "") {
             lua_chon_huong();
-        } else {
+        }
+        // Chuyển từ viết hoa thành viết thường
+        huong_di = huong_di.toLowerCase();
+        if (!isNaN(huong_di)) {
             huong_di_chuyen = parseInt(huong_di);
+        } else if (huong_di == "trái" || huong_di == "trai" || huong_di == "left") {
+            huong_di_chuyen = -1
+        } else if (huong_di == "phải" || huong_di == "phai" || huong_di == "right") {
+            huong_di_chuyen = 1;
+        } else {
+            lua_chon_huong();
+        }
+        // Đưa hướng được chọn ra ngoài màn hình
+        if (huong_di_chuyen == -1) {
+            thong_tin_huong_di_chuyen.innerHTML = THONG_TIN_HUONG_DI_CHUYEN + "<strong>Trái</strong>";
+        } else if (huong_di_chuyen == 1) {
+            thong_tin_huong_di_chuyen.innerHTML = THONG_TIN_HUONG_DI_CHUYEN + "<strong>Phải</strong>";
+        } else {
+            thong_tin_huong_di_chuyen.innerHTML = THONG_TIN_HUONG_DI_CHUYEN + "<strong>Chưa xác định</strong>";
         }
     }
     // Hàm kiểm tra và đưa số lượng sỏi và kho nếu thỏa mãn
@@ -382,7 +420,6 @@
         nhat_soi(o_dan_duoc_chon, vi_tri);
         // Nếu người chơi thứ nhất chọn di chuyển về bên trái
         if (huong_di_chuyen === -1) {
-            console.log("Nguoi thu " + luot_di + " - Huong di chuyen -1");
             // Tiến hành rải sỏi ngược chiều kim đồng hồ
             rai_soi_nguoc_chieu_kim_dong_ho(luot_di);
         }   // Nếu người thứ 1 chọn đi về bên phải 
@@ -413,6 +450,7 @@
         vi_tri_dat_soi_cuoi_cung = vi_tri;
         // Người chơi đã cầm trên tay tất cả sỏi của ô đã chọn
         soi_tren_tay = so_dan_moi_o[vi_tri];
+        thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
         console.log("Số sỏi trên tay: " + soi_tren_tay + " được lấy từ ô thứ " + vi_tri);
         // Trong ô này không còn viên sỏi nào
         so_dan_moi_o[vi_tri] = 0;
@@ -437,7 +475,7 @@
                         hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        if (luot === 1){
+                        if (luot === 1) {
                             o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                         } else {
@@ -453,7 +491,7 @@
                         hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_trai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[0]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        if (luot === 1){
+                        if (luot === 1) {
                             o_quan_ben_trai.style.border = "1px solid #F44336";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                         } else {
@@ -470,7 +508,7 @@
                         hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        if (luot === 1){
+                        if (luot === 1) {
                             o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                         } else {
@@ -487,7 +525,7 @@
                         hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_phai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[6]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        if (luot === 1){
+                        if (luot === 1) {
                             o_quan_ben_phai.style.border = "1px solid #F44336";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                         } else {
@@ -509,7 +547,7 @@
                             }
                             // Sau mỗi lần rải, số sỏi trên tay bị giảm đi 1 viên
                             soi_tren_tay--;
-                            console.log("Số sỏi còn lại trên tay: " + soi_tren_tay);
+                            thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
                             // Vị trí đặt sỏi cuối cùng cũng bị thay đổi
                             console.log("Vị trí đặt sỏi cuối cùng mới: " + vi_tri_dat_soi_cuoi_cung);
                         }, 500);
@@ -536,7 +574,7 @@
                     hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_trai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[0]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    if (luot === 1){
+                    if (luot === 1) {
                         o_quan_ben_trai.style.border = "1px solid #F44336";
                         console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                     } else {
@@ -552,7 +590,7 @@
                     hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_phai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[6]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    if (luot === 1){
+                    if (luot === 1) {
                         o_quan_ben_phai.style.border = "1px solid #F44336";
                         console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                     } else {
@@ -568,7 +606,7 @@
                     hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    if (luot === 1){
+                    if (luot === 1) {
                         o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
                         console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
                     } else {
@@ -589,7 +627,7 @@
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                         }
                         soi_tren_tay--;
-                        console.log("Số sỏi còn lại trên tay: " + soi_tren_tay);
+                        thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
                         // Vị trí đặt sỏi cuối cùng cũng bị thay đổi
                         console.log("Vị trí đặt sỏi cuối cùng mới: " + vi_tri_dat_soi_cuoi_cung);
                     }, 500);
