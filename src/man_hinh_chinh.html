@@ -172,7 +172,7 @@
                 lua_chon_huong();
 
                 // Người thứ nhất tiến hành di chuyển
-                nguoi_thu_nhat_di_chuyen(o_dan_duoc_chon, vi_tri);
+                nguoi_thu_nhat_di_chuyen(o_dan_duoc_chon, vi_tri, luot_di);
 
                 // Kiểm tra tính tiếp tục
                 //di_chuyen_tiep();
@@ -190,7 +190,7 @@
                 lua_chon_huong();
 
                 // Người thứ hai tiến hành di chuyển            
-                nguoi_thu_hai_di_chuyen(o_dan_duoc_chon, vi_tri);
+                nguoi_thu_hai_di_chuyen(o_dan_duoc_chon, vi_tri, luot_di);
 
                 // Kiểm tra tính tiếp tục
                 //di_chuyen_tiep();
@@ -377,33 +377,33 @@
     }
 
     // Người chơi thứ nhất di chuyển
-    function nguoi_thu_nhat_di_chuyen(o_dan_duoc_chon, vi_tri) {
+    function nguoi_thu_nhat_di_chuyen(o_dan_duoc_chon, vi_tri, luot_di) {
         // Nhặt hết sỏi lên vẽ lại ô đang được chọn
         nhat_soi(o_dan_duoc_chon, vi_tri);
         // Nếu người chơi thứ nhất chọn di chuyển về bên trái
         if (huong_di_chuyen === -1) {
             console.log("Nguoi thu " + luot_di + " - Huong di chuyen -1");
             // Tiến hành rải sỏi ngược chiều kim đồng hồ
-            rai_soi_nguoc_chieu_kim_dong_ho();
+            rai_soi_nguoc_chieu_kim_dong_ho(luot_di);
         }   // Nếu người thứ 1 chọn đi về bên phải 
         else if (huong_di_chuyen === 1) {
             // Tiến hành rải sỏi theo chiều kim đồng hồ
-            rai_soi_theo_chieu_kim_dong_ho();
+            rai_soi_theo_chieu_kim_dong_ho(luot_di);
         }
     }
 
     // Người chơi thứ hai di chuyển
-    function nguoi_thu_hai_di_chuyen(o_dan_duoc_chon, vi_tri) {
+    function nguoi_thu_hai_di_chuyen(o_dan_duoc_chon, vi_tri, luot_di) {
         // Nhặt hết sỏi lên vẽ lại ô đang được chọn
         nhat_soi(o_dan_duoc_chon, vi_tri);
         // Nếu người chơi thứ 2 di chuyển sang trái
         if (huong_di_chuyen === -1) {
             // Tiến hành rải sỏi theo chiều kim đồng hồ
-            rai_soi_theo_chieu_kim_dong_ho();
+            rai_soi_theo_chieu_kim_dong_ho(luot_di);
         } // Nếu người chơi thứ 2 di chuyển sang phải 
         else if (huong_di_chuyen === 1) {
             // Tiến hành rải sỏi ngược chiều kim đồng hồ
-            rai_soi_nguoc_chieu_kim_dong_ho();
+            rai_soi_nguoc_chieu_kim_dong_ho(luot_di);
         }
     }
 
@@ -421,7 +421,7 @@
     }
 
     // Tiến hành rải sỏi ngược chiều kim đồng hồ, mỗi ô một viên
-    function rai_soi_nguoc_chieu_kim_dong_ho() {
+    function rai_soi_nguoc_chieu_kim_dong_ho(luot) {
         let bien_tam = soi_tren_tay;
         for (var i = 1; i <= bien_tam; i++) {
             (function (x) {
@@ -437,8 +437,13 @@
                         hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        o_dan[vi_tri_dat_soi_cuoi_cung].style.borderColor = "red";
-                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        if (luot === 1){
+                            o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        } else {
+                            o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #00E676";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                        }
                     }
                     // Nếu ô ở bên trái là ô quan phía trái
                     else if (vi_tri_dat_soi_cuoi_cung === 0) {
@@ -448,8 +453,13 @@
                         hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_trai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[0]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        o_quan_ben_trai.style.borderColor = "red";
-                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        if (luot === 1){
+                            o_quan_ben_trai.style.border = "1px solid #F44336";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        } else {
+                            o_quan_ben_trai.style.border = "1px solid #00E676";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                        }
                     }
                     // Từ ô quan bên trái, tiếp tục đi sang bên trái 1 ô => xuống khu vực ô dân số 11 của người chơi thứ 2
                     else if (vi_tri_dat_soi_cuoi_cung < 0) {
@@ -460,8 +470,13 @@
                         hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        o_dan[vi_tri_dat_soi_cuoi_cung].style.borderColor = "red";
-                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        if (luot === 1){
+                            o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        } else {
+                            o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #00E676";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                        }
                     }
                     // Nếu đi vào ô quan phía phải
                     else if (vi_tri_dat_soi_cuoi_cung === 6) {
@@ -472,19 +487,24 @@
                         hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_phai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[6]);
                         console.log("Lượt đi: " + luot_di);
                         // Đổi màu của ô được lựa chọn
-                        o_quan_ben_phai.style.borderColor = "red";
-                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        if (luot === 1){
+                            o_quan_ben_phai.style.border = "1px solid #F44336";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                        } else {
+                            o_quan_ben_phai.style.border = "1px solid #00E676";
+                            console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                        }
                     }
                     (function () {
                         setTimeout(function () {
                             if (vi_tri_dat_soi_cuoi_cung === 0) {
-                                o_quan_ben_trai.style.borderColor = "black";
+                                o_quan_ben_trai.style.border = "1px solid #000000";
                                 console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                             } else if (vi_tri_dat_soi_cuoi_cung === 6) {
-                                o_quan_ben_phai.style.borderColor = "black";
+                                o_quan_ben_phai.style.border = "1px solid #000000";
                                 console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                             } else {
-                                o_dan[vi_tri_dat_soi_cuoi_cung].style.borderColor = "black";
+                                o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #000000";
                                 console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                             }
                             // Sau mỗi lần rải, số sỏi trên tay bị giảm đi 1 viên
@@ -500,7 +520,7 @@
     }
 
     // Tiến hành rải sỏi theo chiều kim đồng hồ, mỗi ô một viên
-    function rai_soi_theo_chieu_kim_dong_ho() {
+    function rai_soi_theo_chieu_kim_dong_ho(luot) {
         //let a = vi_tri_dat_soi_cuoi_cung;
         let b = soi_tren_tay;
         for (let i = 1; i <= b; i++) {
@@ -516,8 +536,13 @@
                     hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_trai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[0]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    o_quan_ben_trai.style.borderColor = "red";
-                    console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    if (luot === 1){
+                        o_quan_ben_trai.style.border = "1px solid #F44336";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    } else {
+                        o_quan_ben_trai.style.border = "1px solid #00E676";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                    }
                 }
                 // Nếu ô ở bên phải là ô quan phía phải
                 else if (vi_tri_dat_soi_cuoi_cung === 6) {
@@ -527,8 +552,13 @@
                     hien_thi_so_dan_va_quan_trong_o_quan(o_quan_ben_phai, so_dan_moi_o[vi_tri_dat_soi_cuoi_cung], so_quan_moi_o[6]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    o_quan_ben_phai.style.borderColor = "red";
-                    console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    if (luot === 1){
+                        o_quan_ben_phai.style.border = "1px solid #F44336";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    } else {
+                        o_quan_ben_phai.style.border = "1px solid #00E676";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                    }
                 }
                 // Nếu ô ở bên phải là ô dân bình thường
                 else {
@@ -538,19 +568,24 @@
                     hien_thi_so_dan_trong_o_dan(o_dan[vi_tri_dat_soi_cuoi_cung], so_dan_moi_o[vi_tri_dat_soi_cuoi_cung]);
                     console.log("Lượt đi: " + luot_di);
                     // Đổi màu của ô được lựa chọn
-                    o_dan[vi_tri_dat_soi_cuoi_cung].style.borderColor = "red";
-                    console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    if (luot === 1){
+                        o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #F44336";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đỏ");
+                    } else {
+                        o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #00E676";
+                        console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu xanh");
+                    }
                 }
                 (function () {
                     setTimeout(function () {
                         if (vi_tri_dat_soi_cuoi_cung === 0) {
-                            o_quan_ben_trai.style.borderColor = "black";
+                            o_quan_ben_trai.style.border = "1px solid #000000";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                         } else if (vi_tri_dat_soi_cuoi_cung === 6) {
-                            o_quan_ben_phai.style.borderColor = "black";
+                            o_quan_ben_phai.style.border = "1px solid #000000";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                         } else {
-                            o_dan[vi_tri_dat_soi_cuoi_cung].style.borderColor = "black";
+                            o_dan[vi_tri_dat_soi_cuoi_cung].style.border = "1px solid #000000";
                             console.log("Ô: " + vi_tri_dat_soi_cuoi_cung + " đổi màu đen");
                         }
                         soi_tren_tay--;
