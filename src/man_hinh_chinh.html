@@ -378,7 +378,8 @@
     }
     // Hàm lựa chọn hướng di chuyển bên phải hoặc bên trái
     function lua_chon_huong() {
-        var huong_di = prompt("Chọn hướng di chuyển: -1(trái) hoặc 1(phải)", "1");
+        var huong_di = "1";
+        huong_di = prompt("Chọn hướng di chuyển: -1(trái) hoặc 1(phải)", "1");
         if (huong_di == null || huong_di == "") {
             lua_chon_huong();
         }
@@ -421,11 +422,11 @@
         // Nếu người chơi thứ nhất chọn di chuyển về bên trái
         if (huong_di_chuyen === -1) {
             // Tiến hành rải sỏi ngược chiều kim đồng hồ
-            rai_soi_nguoc_chieu_kim_dong_ho(luot_di);
+            rai_soi_nguoc_chieu_kim_dong_ho(luot_di, huong_di_chuyen, tiep_tuc_di_chuyen_nguoc_chieu);
         }   // Nếu người thứ 1 chọn đi về bên phải 
         else if (huong_di_chuyen === 1) {
             // Tiến hành rải sỏi theo chiều kim đồng hồ
-            rai_soi_theo_chieu_kim_dong_ho(luot_di);
+            rai_soi_theo_chieu_kim_dong_ho(luot_di, huong_di_chuyen, tiep_tuc_di_chuyen_xuoi_chieu);
         }
     }
 
@@ -436,11 +437,51 @@
         // Nếu người chơi thứ 2 di chuyển sang trái
         if (huong_di_chuyen === -1) {
             // Tiến hành rải sỏi theo chiều kim đồng hồ
-            rai_soi_theo_chieu_kim_dong_ho(luot_di);
+            rai_soi_theo_chieu_kim_dong_ho(luot_di, huong_di_chuyen, tiep_tuc_di_chuyen_xuoi_chieu);
         } // Nếu người chơi thứ 2 di chuyển sang phải 
         else if (huong_di_chuyen === 1) {
             // Tiến hành rải sỏi ngược chiều kim đồng hồ
-            rai_soi_nguoc_chieu_kim_dong_ho(luot_di);
+            rai_soi_nguoc_chieu_kim_dong_ho(luot_di, huong_di_chuyen, tiep_tuc_di_chuyen_nguoc_chieu);
+        }
+    }
+
+    function tiep_tuc_di_chuyen_nguoc_chieu(luot, huong_di) {
+        console.log("=====================================");
+        console.log("Kết quả: vị trí giải sỏi cuối cùng: " + vi_tri_dat_soi_cuoi_cung);
+        let next_to = --vi_tri_dat_soi_cuoi_cung;
+        if (next_to < 0) {
+            next_to = 11;
+        }
+        // Nếu ô liền kề không trống
+        if (so_dan_moi_o[next_to] != 0) {
+            // Nếu ô đó là ô quan
+            if (so_quan_moi_o[next_to] != 0) {
+                return;
+            } // Nếu ô đó là ô dân bình thường
+            else {
+                nhat_soi(o_dan[next_to], next_to);
+                rai_soi_nguoc_chieu_kim_dong_ho(luot, huong_di, tiep_tuc_di_chuyen_nguoc_chieu);
+            }
+        }
+    }
+
+    function tiep_tuc_di_chuyen_xuoi_chieu(luot, huong_di) {
+        console.log("=====================================");
+        console.log("Kết quả: vị trí giải sỏi cuối cùng: " + vi_tri_dat_soi_cuoi_cung);
+        let next_to = ++vi_tri_dat_soi_cuoi_cung;
+        if (next_to == 12) {
+            next_to = 0;
+        }
+        // Nếu ô liền kề không trống
+        if (so_dan_moi_o[next_to] != 0) {
+            // Nếu ô đó là ô quan
+            if (so_quan_moi_o[next_to] != 0) {
+                return;
+            } // Nếu ô đó là ô dân bình thường
+            else {
+                nhat_soi(o_dan[next_to], next_to);
+                rai_soi_theo_chieu_kim_dong_ho(luot, huong_di, tiep_tuc_di_chuyen_xuoi_chieu);
+            }
         }
     }
 
@@ -459,7 +500,7 @@
     }
 
     // Tiến hành rải sỏi ngược chiều kim đồng hồ, mỗi ô một viên
-    function rai_soi_nguoc_chieu_kim_dong_ho(luot) {
+    function rai_soi_nguoc_chieu_kim_dong_ho(luot, huong_di, callback) {
         let bien_tam = soi_tren_tay;
         for (var i = 1; i <= bien_tam; i++) {
             (function (x) {
@@ -550,6 +591,10 @@
                             thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
                             // Vị trí đặt sỏi cuối cùng cũng bị thay đổi
                             console.log("Vị trí đặt sỏi cuối cùng mới: " + vi_tri_dat_soi_cuoi_cung);
+                            // Gọi ra hàm
+                            if (soi_tren_tay == 0) {
+                                callback(luot, huong_di);
+                            }
                         }, 500);
                     }());
                 }, x * 1000);
@@ -558,7 +603,7 @@
     }
 
     // Tiến hành rải sỏi theo chiều kim đồng hồ, mỗi ô một viên
-    function rai_soi_theo_chieu_kim_dong_ho(luot) {
+    function rai_soi_theo_chieu_kim_dong_ho(luot, huong_di, callback) {
         //let a = vi_tri_dat_soi_cuoi_cung;
         let b = soi_tren_tay;
         for (let i = 1; i <= b; i++) {
@@ -630,71 +675,13 @@
                         thong_tin_so_soi_con_lai_tren_tay.innerHTML = THONG_TIN_SO_SOI_CON_LAI + "<strong>" + soi_tren_tay + "</strong>";
                         // Vị trí đặt sỏi cuối cùng cũng bị thay đổi
                         console.log("Vị trí đặt sỏi cuối cùng mới: " + vi_tri_dat_soi_cuoi_cung);
+                        // Gọi ra hàm
+                        if (soi_tren_tay == 0) {
+                            callback(luot, huong_di);
+                        }
                     }, 500);
                 }());
             }, i * 1000);
-        }
-    }
-
-
-    // Kiểm tra xem lượt chơi của người chơi có đủ điều kiện để tiếp tục không
-    function di_chuyen_tiep() {
-        // Nếu đang ở lượt của người thứ 1
-        if (luot_di === 1) {
-            // Nếu người thứ 1 đang chọn di chuyển về phía bên trái
-            if (huong_di_chuyen === -1) {
-                // Nếu đang ở ô quan bên trái
-                if (vi_tri_dat_soi_cuoi_cung === 0) {
-                    vi_tri_dat_soi_cuoi_cung = 11;
-                } // Nếu đang ở ô dân hoặc ô quan thứ 6
-                else {
-                    vi_tri_dat_soi_cuoi_cung -= 1;
-                }
-                // Nếu vị trí liền kề trống
-                if (so_dan_moi_o[vi_tri_dat_soi_cuoi_cung] === 0) {
-                    // Và vị trí liền kề vị trí trống ấy cũng trống => kết thúc lượt chơi
-                    if (so_dan_moi_o[++vi_tri_dat_soi_cuoi_cung] === 0) {
-                        return;
-                    } else {
-                        // Tiến hành ăn toàn bộ số dân trong ô cách vị trí cuối cùng 2 ô
-                        dua_dan_vao_kho()
-                    }
-
-                }
-            }
-            // Nếu người thứ 1 đang chọn di chuyển về phía bên phải
-            else if (huong_di_chuyen === 1) {
-                // Nếu đang ở ô quan bên trái
-                if (vi_tri_dat_soi_cuoi_cung === 11) {
-                    vi_tri_dat_soi_cuoi_cung = 0;
-                }   // Nếu đang ở ô dân hoặc ở ô quan thứ 6 
-                else {
-                    vi_tri_dat_soi_cuoi_cung += 1;
-                }
-            }
-        }
-        // Nếu đang ở lượt của người thứ 2
-        else if (luot_di === 0) {
-            // Nếu người thứ 2 đang chọn di chuyển về phía bên trái
-            if (huong_di_chuyen === -1) {
-                // Nếu đang ở ô quan bên trái
-                if (vi_tri_dat_soi_cuoi_cung === 11) {
-                    vi_tri_dat_soi_cuoi_cung = 0;
-                } // Nếu đang ở ô dân hoặc ô quan thứ 6
-                else {
-                    vi_tri_dat_soi_cuoi_cung += 1;
-                }
-
-            }
-            // Nếu người thứ 2 đang chọn di chuyển về phía bên phải
-            else if (huong_di_chuyen === 1) {
-                // Nếu đang ở ô quan bên trái
-                if (vi_tri_dat_soi_cuoi_cung === 0) {
-                    vi_tri_dat_soi_cuoi_cung = 11;
-                } else {
-                    vi_tri_dat_soi_cuoi_cung -= 1;
-                }
-            }
         }
     }
 </script>
