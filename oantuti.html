@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>TRÒ CHƠI DÂN GIAN </title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- 3 dòng dưới để hiển thị sweetalert -->
+	<link rel='stylesheet' href='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.css'>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src='https://cdn.rawgit.com/t4t5/sweetalert/v0.2.0/lib/sweet-alert.min.js'></script>
+
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<style>
+	#bi_an {
+		margin: 20px auto;
+		width: 155px;
+		height: 155px;
+		background-color: white;
+		border: 5px ridge orangered;
+	}
+
+	.vach_ke {
+		width: 200px;
+		height: 3px;
+		background-color: white;
+		display: inline-block;
+	}
+
+	#thong_bao {
+		text-align: center;
+		font-size: 35px;
+		color: white;
+		text-shadow: 3px 1px orangered;
+		display: inline-block;
+	}
+
+	.lua_chon {
+		width: 155px;
+		height: 155px;
+		background-color: white;
+		border: 5px ridge orangered;
+		margin: 20px;
+		display: inline-block;
+	}
+</style>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="sidebar-nav">
+					<div class="navbar navbar-default" role="navigation">
+
+						<ul class="nav navbar-nav">
+
+							<li>
+								<a href="index.html">
+									<span class="glyphicon glyphicon-chevron-left"></span> Quay lại </a>
+								<li>
+									<li>
+										<a href="chichichanhchanh.html">Chi chi chành chành</a>
+									</li>
+									<li>
+										<a id="tranghienthoi" href="oantuti.html">Oẳn tù tì</a>
+									</li>
+									<li>
+										<a href="oanquan.html">Ô ăn quan</a>
+									</li>
+									<li>
+										<a href="bitmatbatde.html">Bịt mắt bắt dê</a>
+									</li>
+									<li>
+										<a href="rongranlenmay.html">Rồng rắn lên mây</a>
+									</li>
+									<li>
+										<a href="meoduoichuot.html">Mèo đuổi chuột</a>
+									</li>
+									<li>
+										<a href="trontim.html">Trốn tìm</a>
+									</li>
+									<li>
+										<a href="nunanunong.html">Nu na nu nống</a>
+									</li>
+									<li>
+										<a href="cuopco.html">Cướp cờ</a>
+									</li>
+									<li>
+										<a href="nhayloco.html">Nhảy lò cò</a>
+									</li>
+
+						</ul>
+
+					</div>
+				</div>
+			</div>
+			<center>
+				<div class="col-sm-9">
+					<a href="nunanunong.html"> <img class = "anh_header" src = "header/header_nu_na_nu_nong.png" ></a>
+				<a href="chichichanhchanh.html"><img class = "anh_header" src = "header/header_chi_chi_chanh_chanh.png" ></a>
+				<a href="oanquan.html"><img class = "anh_header" src = "header/header_o_an_quan.png" ></a>
+				<a href="oantuti.html"><img class = "anh_header" src = "header/header_oan_tu_ti.png" ></a>
+				<a href="rongranlenmay.html"><img class = "anh_header" src = "header/header_rong_ran_len_may.png" ></a>
+					<ul class="nav nav-tabs nav-justified">
+						<li class="active">
+							<a data-toggle="tab" href="#cachchoi">Cách chơi</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#video">Video</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#choingay">Chơi ngay</a>
+						</li>
+					</ul>
+
+					<div class="tab-content">
+
+						<div id="cachchoi" class="tab-pane fade in active">
+							<center>
+								<img class="imgcontent" src="image/oantuti.jpg">
+							</center>
+							<p>Trò chơi có thể tiến hành khi có 2 người chơi trở lên cùng đứng hoặc ngồi, tay đung đưa theo nhịp câu hát:
+								<br /> Oẳn tù tì
+								<br /> Ra cái gì?
+								<br /> Ra cái này!
+								<br /> Kết thúc câu hát, tất cả người chơi cùng xòe tay theo các hình: nắm tay là búa, chĩa hai ngón trỏ và ngón giữa là
+								kéo, ngón trỏ là dùi, xòe cả bàn tay là lá. Tìm ra người thắng theo quy tắc sau: búa nện được kéo, dùi nhưng bị lá
+								bọc; kéo cắt được lá; dùi đâm thủng lá; dùi khoan được kéo. .
+							</p>
+						</div>
+						<div id="video" class="tab-pane fade">
+							<video width="100%" height="100%" controls>
+							  <source src="videos/oantuti.mp4" type="video/mp4">
+							  
+							</video>
+						</div>
+						<div id="choingay" class="tab-pane fade" style="margin-left:5%" ;>
+							<div style="background-image: url('./images/oan_tu_ti/lang_que1.jpg'); background-repeat:no-repeat;">
+								<div>
+									<image id="bi_an" src="./images/oan_tu_ti/mystery.png"></image>
+								</div>
+								<div id="vach_ngan">
+									<div class="vach_ke"></div>
+									<h2 id="thong_bao"> OẲN TÙ TÌ </h2>
+									<div class="vach_ke"></div>
+									<h3 style="color: white"> Ấn chọn một trong ba ô bên dưới</h3>
+								</div>
+
+								<div>
+									<image class="lua_chon" id="keo" alt="1" src="./images/oan_tu_ti/scissors.png"></image>
+									<image class="lua_chon" id="la" alt="2" src="./images/oan_tu_ti/paper.png"></image>
+									<image class="lua_chon" id="bua" alt="3" src="./images/oan_tu_ti/rock.png"></image>
+								</div>
+							</div>
+							
+						</div>
+						<script>
+							// Khai báo biến lưu tên gọi
+							var ban_chon, doi_thu_chon, dong_thong_bao;
+							// Khai báo biến lưu trữ ô bí ẩn
+							var bi_an = document.querySelector("#bi_an");
+							// Khai báo các biến lưu trữ các ô lựa chọn
+							var la = document.querySelector("#la");
+							var keo = document.querySelector("#keo");
+							var bua = document.querySelector("#bua");
+
+							// Gán sự kiện lắng nghe cho các ô lựa chọn
+							la.addEventListener("click", xem_ket_qua(la), false);
+							keo.addEventListener("click", xem_ket_qua(keo), false);
+							bua.addEventListener("click", xem_ket_qua(bua), false);
+
+							// Hàm xem kết quả
+							function xem_ket_qua(lua_chon) {
+								return function () {
+									lua_chon.style.border = "5px outset green";
+									var so_da_chon = parseInt(lua_chon.alt);
+									switch (so_da_chon) {
+										case 1:
+											ban_chon = "Kéo";
+											break;
+										case 2:
+											ban_chon = "Lá";
+											break;
+										case 3:
+											ban_chon = "Búa";
+											break;
+									}
+									// Chọn ngẫu nhiên một số từ trong khoảng từ 0 đến 3 cho ô bí ẩn
+									var so_ngau_nhien = Math.ceil(Math.random() * 3);
+									// Hiển thị giá trị ngẫu nhiên ấy thông qua hình ảnh
+									if (so_ngau_nhien == 1) {
+										bi_an.src = "./images/oan_tu_ti/reverse_scissors.png"
+										doi_thu_chon = "Kéo";
+									} else if (so_ngau_nhien == 2) {
+										bi_an.src = "./images/oan_tu_ti/reverse_paper.png"
+										doi_thu_chon = "Lá";
+									} else {
+										bi_an.src = "./images/oan_tu_ti/reverse_rock.png";
+										doi_thu_chon = "Búa";
+									}
+									console.log("Bạn chọn: " + ban_chon);
+									console.log("Đối thủ chọn: " + doi_thu_chon);
+									// Hiển thị thông báo sau 1 giây
+									switch (so_ngau_nhien) {
+										case 1:
+											switch (so_da_chon) {
+												case 1:
+													dong_thong_bao = "KẾT QUẢ HÒA";
+													break;
+												case 2:
+													dong_thong_bao = "KẾT QUẢ THUA";
+													break;
+												case 3:
+													dong_thong_bao = "KẾT QUẢ THẮNG";
+													break;
+											}
+											break;
+										case 2:
+											switch (so_da_chon) {
+												case 1:
+													dong_thong_bao = "KẾT QUẢ THẮNG";
+													break;
+												case 2:
+													dong_thong_bao = "KẾT QUẢ HÒA";
+													break;
+												case 3:
+													dong_thong_bao = "KẾT QUẢ THUA";
+													break;
+											}
+											break;
+										case 3:
+											switch (so_da_chon) {
+												case 1:
+													dong_thong_bao = "KẾT QUẢ THUA";
+													break;
+												case 2:
+													dong_thong_bao = "KẾT QUẢ THẮNG";
+													break;
+												case 3:
+													dong_thong_bao = "KẾT QUẢ HÒA";
+													break;
+											}
+											break;
+									}
+									setTimeout(function () {
+										swal({
+											title: dong_thong_bao,
+											text: "Bạn chọn: " + ban_chon + '\n' + "Đối thủ chọn: " + doi_thu_chon,
+											type: "info",
+											showCancelButton: false,
+											confirmButtonText: "Chơi tiếp",
+											closeOnConfirm: true,
+										},
+											function (isConfirm) {
+												if (isConfirm) {
+													lua_chon.style.border = "5px ridge orangered";
+													bi_an.src = "./images/oan_tu_ti/mystery.png";
+												}
+											});
+									}, 1000);
+								}
+							}
+						</script>
+					</div>
+					<!-- FOOTER BEGIN -->
+		<div class="footer-main">
+			 Nguyễn Đỗ Vân Anh – 5D – Tiểu học Dịch Vọng A – Cầu Giấy </br >
+			 Nguyễn Trần Khánh Linh – 5D – Tiểu học Dịch Vọng A – Cầu Giấy </br >
+			 Đỗ Thị Thanh Nhàn – 5M – Tiểu học Dịch Vọng A – Cầu Giấy </br >
+		</div>
+		<!-- FOOTER END -->
+				</div>
+		</div>
+	</div>
+</body>
+
+</html>
